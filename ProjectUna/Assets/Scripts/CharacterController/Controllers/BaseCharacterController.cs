@@ -853,7 +853,15 @@ namespace ECM.Controllers
 
             jump = Input.GetButton("Jump");
 
-            crouch = Input.GetKey(KeyCode.C);
+            crouch = Input.GetKey(KeyCode.LeftControl);
+        }
+
+        void LateUpdate()
+        {
+            Vector3 pos = transform.position;
+
+            Vector3 lockedPos = new Vector3(pos.x, pos.y, -1);
+            transform.position = lockedPos;
         }
 
         #endregion
@@ -954,4 +962,5 @@ namespace ECM.Controllers
         
         #endregion
     }
+
 }
