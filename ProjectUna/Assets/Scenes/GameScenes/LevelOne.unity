@@ -52551,7 +52551,7 @@ MonoBehaviour:
     m_Bits: 1
   _groundLimit: 60
   _stepOffset: 0.5
-  _ledgeOffset: 0
+  _ledgeOffset: 0.3
   _castDistance: 0.5
   _triggerInteraction: 1
 --- !u!136 &1212366148
