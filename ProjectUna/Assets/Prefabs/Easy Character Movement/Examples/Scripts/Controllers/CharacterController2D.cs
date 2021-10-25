@@ -41,7 +41,7 @@ namespace ECM.Examples
 
             jump = Input.GetButton("Jump");
 
-            crouch = Input.GetKey(KeyCode.C);
+            crouch = Input.GetKey(KeyCode.LeftControl);
         }
 
         /// <summary>
