@@ -23,7 +23,10 @@ public class Detector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectInCone();
+        if (player != null)
+        {
+            DetectInCone();
+        }        
     }
 
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
@@ -37,11 +40,8 @@ public class Detector : MonoBehaviour
 
     void DetectInCone()
     {
-        GetComponent<MeshRenderer>().material.color = Color.green;
-
-
         Vector3 dirToTarget = (player.position - transform.position).normalized;
-        if (Vector3.Angle(transform.forward, dirToTarget) < detectionAngle / 2)
+        if (Vector3.Angle(transform.up, dirToTarget) < detectionAngle / 2)
         {
             float dstToPlayer = Vector3.Distance(transform.position, player.position);
             //Debug.Log("In Cone");
@@ -53,9 +53,13 @@ public class Detector : MonoBehaviour
                 if (ray.transform == player)
                 {
                     GetComponent<MeshRenderer>().material.color = Color.red;
+
+                    return;
                 }
             }
         }
+
+        GetComponent<MeshRenderer>().material.color = Color.green;
     }
 
     private void OnDrawGizmos()
