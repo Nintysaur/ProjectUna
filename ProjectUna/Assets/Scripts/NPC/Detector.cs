@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Detector : MonoBehaviour
 {
-    [SerializeField] static Transform player; //The object the detector are looking for
+    [SerializeField] static Detectable[] detectables; //The objects the detectors are looking for
 
     [Range(0,360)] public float detectionAngle = 30;
     public float detectionRange = 5;
@@ -14,18 +14,22 @@ public class Detector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (player == null)
+        if (detectables == null)
         {
-            player = GameObject.Find("Player").transform;
+            detectables = GameObject.FindObjectsOfType<Detectable>();
         }
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (player != null)
+        if (detectables != null)
         {
-            DetectInCone();
+            foreach (Detectable dt in detectables)
+            {
+                Transform obj = dt.gameObject.transform;
+                DetectInCone(obj, dt);
+            }           
         }        
     }
 
@@ -38,22 +42,22 @@ public class Detector : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), Mathf.Cos(angleInDegrees * Mathf.Deg2Rad), 0);
     }
 
-    void DetectInCone()
+    void DetectInCone(Transform detectable, Detectable dt)
     {
-        Vector3 dirToTarget = (player.position - transform.position).normalized;
+        Vector3 dirToTarget = (detectable.position - transform.position).normalized;
         if (Vector3.Angle(transform.up, dirToTarget) < detectionAngle / 2)
         {
-            float dstToPlayer = Vector3.Distance(transform.position, player.position);
+            float dstTodetectables = Vector3.Distance(transform.position, detectable.position);
             //Debug.Log("In Cone");
 
             RaycastHit ray;
 
-            if (Physics.Raycast(transform.position, dirToTarget,out ray ,dstToPlayer, sandbox))
+            if (Physics.Raycast(transform.position, dirToTarget,out ray ,dstTodetectables, sandbox))
             {
-                if (ray.transform == player)
+                if (ray.transform == detectable)
                 {
                     GetComponent<MeshRenderer>().material.color = Color.red;
-
+                    dt.OnDetect();
                     return;
                 }
             }
